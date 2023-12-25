@@ -14,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createIssueSchema } from '@/app/api/validationSchemas';
 import axios from 'axios';
 import ErrorMessage from '@/app/components/ErrorMessage';
+import Spinner from '@/app/components/Spinner';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -23,7 +24,7 @@ export default () => {
 		register,
 		control,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 	} = useForm<IssueForm>({
 		resolver: zodResolver(createIssueSchema),
 	});
@@ -61,7 +62,9 @@ export default () => {
 
 				<ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-				<Button>Submit New Issue</Button>
+				<Button disabled={isSubmitting}>
+					Submit New Issue {isSubmitting && <Spinner />}
+				</Button>
 			</form>
 		</div>
 	);
