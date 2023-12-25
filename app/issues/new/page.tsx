@@ -2,9 +2,6 @@
 
 import 'easymde/dist/easymde.min.css';
 import dynamic from 'next/dynamic';
-const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
-	ssr: false,
-});
 import { useState } from 'react';
 import { Button, TextField, Callout, Text } from '@radix-ui/themes';
 import { useForm, Controller } from 'react-hook-form';
@@ -15,10 +12,16 @@ import { createIssueSchema } from '@/app/api/validationSchemas';
 import axios from 'axios';
 import ErrorMessage from '@/app/components/ErrorMessage';
 import Spinner from '@/app/components/Spinner';
+import delay from 'delay';
+
+//Dynamically loading component or lazy loading
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
+	ssr: false,
+});
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
-export default () => {
+export default async () => {
 	const [error, setError] = useState('');
 	const router = useRouter();
 	const {
@@ -38,6 +41,8 @@ export default () => {
 			setError('An unexpected error occurred.');
 		}
 	});
+
+	await delay(2000);
 
 	return (
 		<div className="max-w-xl">
