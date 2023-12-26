@@ -45,3 +45,5 @@ export default async () => {
 		</div>
 	);
 };
+
+export const dynamic = 'force-dynamic';
