@@ -13,8 +13,6 @@ export default async ({ params }: Props) => {
 		where: { id: +params.id },
 	});
 
-	//we do not need to return notFound() because the return type is never
-	//so it does not return any values
 	if (!issue) notFound();
 
 	return (
@@ -29,7 +27,7 @@ export default async ({ params }: Props) => {
 	);
 };
 
-/*
+/* 
 	we do not need to return notFound() because the return type is never
 	so it does not return any values
   if (!issue) notFound();
