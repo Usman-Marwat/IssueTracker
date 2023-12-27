@@ -1,11 +1,19 @@
 'use client';
 
-import { Box, Container, Flex } from '@radix-ui/themes';
+import {
+	Avatar,
+	Box,
+	Container,
+	DropdownMenu,
+	Flex,
+	Text,
+} from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { AiFillBug } from 'react-icons/ai';
 import Link from 'next/link';
 import classnames from 'classnames';
+import { Session } from 'next-auth';
 
 export default () => {
 	const { status, data: session } = useSession();
@@ -16,7 +24,7 @@ export default () => {
 				<Flex justify="between">
 					<MenuButtons />
 
-					<AuthButtons status={status} />
+					<AuthButtons status={status} session={session} />
 				</Flex>
 			</Container>
 		</nav>
@@ -55,12 +63,38 @@ const MenuButtons = () => {
 	);
 };
 
-const AuthButtons = ({ status }: { status: string }) => {
+const AuthButtons = ({
+	status,
+	session,
+}: {
+	status: string;
+	session: Session | null;
+}) => {
 	return (
 		<Box>
-			{status === 'authenticated' && (
-				<Link href="/api/auth/signout">Log out</Link>
+			{status === 'authenticated' && session && (
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger>
+						<Avatar
+							src={session.user!.image!}
+							fallback="?"
+							size="2"
+							radius="full"
+							className="cursor-pointer"
+						/>
+					</DropdownMenu.Trigger>
+
+					<DropdownMenu.Content>
+						<DropdownMenu.Label>
+							<Text size="2">{session.user!.email}</Text>
+						</DropdownMenu.Label>
+						<DropdownMenu.Item>
+							<Link href="/api/auth/signout">Log out</Link>
+						</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 			)}
+
 			{status === 'unauthenticated' && (
 				<Link href="/api/auth/signin">Login</Link>
 			)}
