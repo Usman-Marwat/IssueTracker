@@ -6,6 +6,7 @@ import { Inter } from 'next/font/google';
 import { Container, Theme, ThemePanel } from '@radix-ui/themes';
 import Navbar from './Navbar';
 import { PropsWithChildren } from 'react';
+import AuthProvider from './auth/Provider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -18,13 +19,15 @@ export default function RootLayout({ children }: PropsWithChildren) {
 	return (
 		<html lang="en">
 			<body className={inter.variable}>
-				<Theme appearance="light" accentColor="violet">
-					<Navbar />
-					<main className="p-5">
-						<Container>{children}</Container>
-					</main>
-					{/* <ThemePanel /> */}
-				</Theme>
+				<AuthProvider>
+					<Theme appearance="light" accentColor="violet">
+						<Navbar />
+						<main className="p-5">
+							<Container>{children}</Container>
+						</main>
+						{/* <ThemePanel /> */}
+					</Theme>
+				</AuthProvider>
 			</body>
 		</html>
 	);
