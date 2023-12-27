@@ -21,3 +21,11 @@ export async function PATCH(request: req, { params }: Params) {
 
 	return res.json(updatedIssue);
 }
+
+export async function DELETE(request: req, { params }: Params) {
+	const issue = await prisma.issue.findUnique({ where: { id: +params.id } });
+	if (!issue) return res.json({ error: 'Invalid issue' }, { status: 404 });
+
+	await prisma.issue.delete({ where: { id: issue.id } });
+	return res.json({});
+}
