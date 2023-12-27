@@ -23,7 +23,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 					<main className="p-5">
 						<Container>{children}</Container>
 					</main>
-					<ThemePanel />
+					{/* <ThemePanel /> */}
 				</Theme>
 			</body>
 		</html>
