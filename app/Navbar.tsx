@@ -1,24 +1,37 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import React from 'react';
-import { AiFillBug } from 'react-icons/ai';
-import classnames from 'classnames';
+import { Box, Container, Flex } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
-import { Box } from '@radix-ui/themes';
+import { usePathname } from 'next/navigation';
+import { AiFillBug } from 'react-icons/ai';
+import Link from 'next/link';
+import classnames from 'classnames';
 
 export default () => {
-	const currentPath = usePathname();
 	const { status, data: session } = useSession();
 
+	return (
+		<nav className="border-b mb-5 px-5 py-3">
+			<Container>
+				<Flex justify="between">
+					<MenuButtons />
+
+					<AuthButtons status={status} />
+				</Flex>
+			</Container>
+		</nav>
+	);
+};
+
+const MenuButtons = () => {
+	const currentPath = usePathname();
 	const links = [
 		{ label: 'Dashboard', href: '/' },
 		{ label: 'Issues', href: '/issues/list' },
 	];
 
 	return (
-		<nav className="flex space-x-6 border-b mb-5 px-5 h-14 items-center">
+		<Flex align="center" gap="3">
 			<Link href="/">
 				<AiFillBug />
 			</Link>
@@ -38,14 +51,19 @@ export default () => {
 					</li>
 				))}
 			</ul>
-			<Box>
-				{status === 'authenticated' && (
-					<Link href="/api/auth/signout">Log out</Link>
-				)}
-				{status === 'unauthenticated' && (
-					<Link href="/api/auth/signin">Login</Link>
-				)}
-			</Box>
-		</nav>
+		</Flex>
+	);
+};
+
+const AuthButtons = ({ status }: { status: string }) => {
+	return (
+		<Box>
+			{status === 'authenticated' && (
+				<Link href="/api/auth/signout">Log out</Link>
+			)}
+			{status === 'unauthenticated' && (
+				<Link href="/api/auth/signin">Login</Link>
+			)}
+		</Box>
 	);
 };
