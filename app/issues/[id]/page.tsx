@@ -39,6 +39,17 @@ export default async ({ params }: Props) => {
 	);
 };
 
+export async function generateMetadata({ params }: Props) {
+	const issue = await prisma.issue.findUnique({
+		where: { id: parseInt(params.id) },
+	});
+
+	return {
+		title: issue?.title,
+		description: 'Details of issue ' + issue?.id,
+	};
+}
+
 /* 
 	we do not need to return notFound() because the return type is never
 	so it does not return any values
